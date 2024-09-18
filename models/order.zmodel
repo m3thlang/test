@@ -1,0 +1,26 @@
+
+ import "./user.zmodel"  
+ import "./product.zmodel"  
+ import "./trip.zmodel"  
+ import "./review.zmodel"  
+
+model Order {
+
+    id                String        @id @default(uuid())  
+    quantity    Float?            
+    price          Float?            
+    status        String?          
+    buyerId      String?          
+    buyer          User?            @relation(fields: [buyerId], references: [id], name:"buyer")  
+    sellerId    String?          
+    seller        User?            @relation(fields: [sellerId], references: [id], name:"seller")  
+    productId  String?          
+    product      Product?      @relation(fields: [productId], references: [id], name:"product")  
+    tripId        String?          
+    trip            Trip?            @relation(fields: [tripId], references: [id], name:"trip")  
+
+reviews      Review[]    @relation("order")  
+      dateCreated DateTime @default(now())
+      dateUpdated DateTime @updatedAt  @default(now())
+      @@allow("all", true)
+}

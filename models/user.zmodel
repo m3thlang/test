@@ -1,0 +1,50 @@
+import "./account.zmodel";
+import "./session.zmodel";
+
+import './trip.zmodel'
+
+import './order.zmodel'
+
+import './review.zmodel'
+
+import './message.zmodel'
+
+enum UserStatus {
+    INVITED
+    VERIFIED
+}
+
+model User {
+    id                String             @id @default(uuid())
+    name              String?
+    email             String?            @unique
+    pictureUrl        String?            @default('https://i.imgur.com/ZdJSK3Y.jpeg')
+    tokenInvitation   String?
+    emailVerified     Boolean?
+    
+    status            UserStatus         @default(VERIFIED)
+
+    // this is the role of the user for the application
+    globalRole        String             @default('USER')
+    password          String?            @password @omit
+    dateCreated       DateTime           @default(now())
+    dateUpdated       DateTime           @updatedAt @default(now())
+    accounts          Account[]
+    sessions          Session[]
+
+trips          Trip[]        @relation("user")  
+        ordersAsBuyer  Order[]      @relation("buyer")  
+        ordersAsSeller  Order[]      @relation("seller")  
+        reviewsAsReviewer  Review[]    @relation("reviewer")  
+        reviewsAsReviewee  Review[]    @relation("reviewee")  
+        messagesAsSender  Message[]  @relation("sender")  
+        messagesAsReceiver  Message[]  @relation("receiver")  
+
+@@auth()
+    @@allow("all", auth().id == this.id)
+    @@allow('all', auth().globalRole == 'ADMIN')
+
+    //we only allow that user to register if they don't create an admin role
+    @@allow("create", globalRole != 'ADMIN')
+    @@allow("read", true)
+}

@@ -1,0 +1,23 @@
+
+ import "./user.zmodel"  
+ import "./city.zmodel"  
+ import "./order.zmodel"  
+
+model Trip {
+
+    id                String        @id @default(uuid())  
+    departureDate  String?          
+    arrivalDate  String?          
+    status        String?          
+    userId        String?          
+    user            User?            @relation(fields: [userId], references: [id], name:"user")  
+    originCityId  String?          
+    originCity  City?            @relation(fields: [originCityId], references: [id], name:"originCity")  
+    destinationCityId  String?          
+    destinationCity  City?            @relation(fields: [destinationCityId], references: [id], name:"destinationCity")  
+
+orders        Order[]      @relation("trip")  
+      dateCreated DateTime @default(now())
+      dateUpdated DateTime @updatedAt  @default(now())
+      @@allow("all", true)
+}

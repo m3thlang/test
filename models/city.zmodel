@@ -1,0 +1,15 @@
+
+ import "./trip.zmodel"  
+
+model City {
+
+    id                String        @id @default(uuid())  
+    name            String?          
+    region        String?          
+
+tripsAsOriginCity  Trip[]        @relation("originCity")  
+    tripsAsDestinationCity  Trip[]        @relation("destinationCity")  
+      dateCreated DateTime @default(now())
+      dateUpdated DateTime @updatedAt  @default(now())
+      @@allow("all", true)
+}

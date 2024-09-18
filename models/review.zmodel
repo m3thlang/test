@@ -1,0 +1,20 @@
+
+ import "./user.zmodel"  
+ import "./order.zmodel"  
+
+model Review {
+
+    id                String        @id @default(uuid())  
+    rating        Float?            
+    comment      String?          
+    reviewerId  String?          
+    reviewer    User?            @relation(fields: [reviewerId], references: [id], name:"reviewer")  
+    revieweeId  String?          
+    reviewee    User?            @relation(fields: [revieweeId], references: [id], name:"reviewee")  
+    orderId      String?          
+    order          Order?          @relation(fields: [orderId], references: [id], name:"order")  
+
+dateCreated DateTime @default(now())
+      dateUpdated DateTime @updatedAt  @default(now())
+      @@allow("all", true)
+}
